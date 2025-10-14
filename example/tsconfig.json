@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "wonderpush-expo-plugin": ["../src/index"],
+      "wonderpush-expo-plugin/*": ["../src/*"]
+    }
+  }
+}

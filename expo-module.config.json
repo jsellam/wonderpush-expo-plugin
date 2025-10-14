@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["WonderPushExpoPluginModule"]
+  },
+  "android": {
+    "modules": ["com.wonderpush.sdk.reactnative.expo.WonderPushExpoPluginModule"]
+  }
+}
