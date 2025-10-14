@@ -1,7 +1,8 @@
 {
   "platforms": ["ios", "android"],
   "apple": {
-    "modules": ["WonderPushExpoPluginModule"]
+    "modules": ["WonderPushExpoPluginModule"],
+    "appDelegateSubscribers": ["WonderPushAppDelegateSubscriber"]
   },
   "android": {
     "modules": ["com.wonderpush.sdk.reactnative.expo.WonderPushExpoPluginModule"]
