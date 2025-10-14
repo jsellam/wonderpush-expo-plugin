@@ -1,11 +1,6 @@
 import { NativeModule, requireNativeModule } from 'expo';
 
-import { WonderPushExpoPluginModuleEvents } from './WonderPushExpoPlugin.types';
-
-declare class WonderPushExpoPluginModule extends NativeModule<WonderPushExpoPluginModuleEvents> {
-  PI: number;
-  hello(): string;
-  setValueAsync(value: string): Promise<void>;
+declare class WonderPushExpoPluginModule extends NativeModule<> {
 }
 
 // This call loads the native module object from the JSI.
