@@ -10,6 +10,7 @@ export type WonderPushPluginProps = {
   autoInit?: boolean;
   requiresUserConsent?: boolean;
   geolocation?: boolean;
+  iosAPSEnvironment?: 'development' | 'production';
 };
 
 const withWonderPush: ConfigPlugin<WonderPushPluginProps | void> = (
