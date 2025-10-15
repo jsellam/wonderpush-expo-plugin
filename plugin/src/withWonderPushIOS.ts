@@ -6,7 +6,13 @@ const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
   expoConfig,
   props
 ) => {
-  // Add remote-notification to UIBackgroundModes
+  const clientId = props?.clientId || 'USE_REMEMBERED';
+  const clientSecret = props?.clientSecret || 'USE_REMEMBERED';
+  const logging = props?.logging;
+  const requiresUserConsent = props?.requiresUserConsent;
+  const geolocation = props?.geolocation;
+
+  // Add WonderPush configuration and remote-notification to UIBackgroundModes
   expoConfig = withInfoPlist(expoConfig, (config) => {
     const existingModes = config.modResults.UIBackgroundModes || [];
 
@@ -16,6 +22,25 @@ const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
         ...existingModes,
         'remote-notification',
       ];
+    }
+
+    // Add WonderPush clientId and clientSecret
+    config.modResults.WonderPushClientId = clientId;
+    config.modResults.WonderPushClientSecret = clientSecret;
+
+    // Add logging config if explicitly set to true or false
+    if (typeof logging === 'boolean') {
+      config.modResults.WonderPushLogging = logging;
+    }
+
+    // Add requiresUserConsent config if explicitly set to true or false
+    if (typeof requiresUserConsent === 'boolean') {
+      config.modResults.WonderPushRequiresUserConsent = requiresUserConsent;
+    }
+
+    // Add geolocation config if explicitly set to true or false
+    if (typeof geolocation === 'boolean') {
+      config.modResults.WonderPushGeolocation = geolocation;
     }
 
     return config;
