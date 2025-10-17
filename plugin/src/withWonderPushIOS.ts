@@ -1,6 +1,7 @@
 import type { ConfigPlugin } from '@expo/config-plugins';
 import { withInfoPlist, withEntitlementsPlist } from '@expo/config-plugins';
 import type { WonderPushPluginProps } from '.';
+import withWonderPushNotificationServiceExtension from './withWonderPushNotificationServiceExtension';
 
 const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
   expoConfig,
@@ -52,6 +53,9 @@ const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
     config.modResults['aps-environment'] = apsEnvironment;
     return config;
   });
+
+  // Add Notification Service Extension
+  expoConfig = withWonderPushNotificationServiceExtension(expoConfig, props);
 
   return expoConfig;
 };

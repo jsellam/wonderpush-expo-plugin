@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/withWonderPushAndroid.ts","./src/withWonderPushIOS.ts"],"version":"5.9.3"}
+{"root":["./src/index.ts","./src/withWonderPushAndroid.ts","./src/withWonderPushIOS.ts","./src/withWonderPushNotificationServiceExtension.ts"],"version":"5.9.3"}
