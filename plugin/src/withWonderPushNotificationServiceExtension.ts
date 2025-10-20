@@ -1,3 +1,4 @@
+import type { ExpoConfig } from '@expo/config';
 import type { ConfigPlugin } from '@expo/config-plugins';
 import {
   withXcodeProject,
@@ -90,6 +91,14 @@ function createNotificationServiceFiles(
   fs.writeFileSync(path.join(targetPath, NSE_INFO_PLIST), infoPlistContent);
 }
 
+function getNSEBundleId(config: ExpoConfig): string {
+  const mainAppBundleId = config.ios?.bundleIdentifier;
+  if (!mainAppBundleId || typeof mainAppBundleId !== 'string') {
+    throw new Error('Please set expo.ios.bundleIdentifier in your app.json/app.config.js/app.config.ts file');
+  }
+  return `${mainAppBundleId}.${NSE_TARGET_NAME}`;
+}
+
 /**
  * Adds the Notification Service Extension target to the Xcode project
  */
@@ -97,6 +106,7 @@ const withNotificationServiceExtensionXcodeTarget: ConfigPlugin<
   WonderPushPluginProps | void
 > = (config, props) => {
   const developmentTeam = IOSConfig.DevelopmentTeam.getDevelopmentTeam(config);
+  const extensionBundleId = getNSEBundleId(config);
   return withXcodeProject(config, async (config) => {
     const xcodeProject = config.modResults;
     const clientId = props?.clientId || 'USE_REMEMBERED';
@@ -110,20 +120,6 @@ const withNotificationServiceExtensionXcodeTarget: ConfigPlugin<
       );
       return config;
     }
-
-    // Get the main application target to derive bundle ID
-    const applicationTarget = xcodeProject.getFirstTarget();
-    let mainAppBundleId = xcodeProject.getBuildProperty('PRODUCT_BUNDLE_IDENTIFIER', undefined, applicationTarget.firstTarget.name);
-
-    // Ensure we have a valid bundle ID (no undefined or null values)
-    if (!mainAppBundleId || mainAppBundleId === 'undefined') {
-      throw new Error('Could not determine main app bundle identifier');
-    }
-
-    // Strip quotes from bundle ID if present (getBuildProperty returns quoted strings)
-    mainAppBundleId = mainAppBundleId.replace(/^"(.*)"$/, '$1');
-
-    const extensionBundleId = `${mainAppBundleId}.NotificationServiceExtension`;
 
     // WORKAROUND for xcode library bug with single target projects
     // Xcode projects don't contain these if there is only one target
@@ -210,6 +206,7 @@ const withNotificationServiceExtensionXcodeTarget: ConfigPlugin<
 
     let mainTargetIPhoneOSDeploymentTarget: string|undefined;
     let mainTargetTargetedDeviceFamily: string|undefined;
+    const applicationTarget = xcodeProject.getFirstTarget();
     if (applicationTarget.firstTarget.buildConfigurationList) {
       const buildConfigurationsList = xcodeProject.pbxXCConfigurationList()[applicationTarget.firstTarget.buildConfigurationList];
       if (buildConfigurationsList && buildConfigurationsList.buildConfigurations) {
@@ -351,21 +348,46 @@ end
   });
 };
 
+const withNotificationServiceExtensionEASConfig: ConfigPlugin<
+  WonderPushPluginProps | void
+> = (config) => {
+  const extensionBundleId = getNSEBundleId(config);
+  config.extra = {
+    ...config.extra,
+    eas: {
+      ...config.extra?.eas,
+      build: {
+        ...config.extra?.eas?.build,
+        experimental: {
+          ...config.extra?.eas?.build?.experimental,
+          ios: {
+            ...config.extra?.eas?.build?.experimental?.ios,
+            appExtensions: [
+              ...(config.extra?.eas?.build?.experimental?.ios?.appExtensions ?? []),
+              {
+                // keep in sync with native changes in NSE
+                targetName: NSE_TARGET_NAME,
+                bundleIdentifier: extensionBundleId,
+              }
+            ]
+          }
+        }
+      }
+    }
+  };
+  return config;
+}
+
 /**
  * Main config plugin that combines all the modifications
  */
 const withWonderPushNotificationServiceExtension: ConfigPlugin<
   WonderPushPluginProps | void
 > = (config, props) => {
-  // First, create the files on disk
   config = withNotificationServiceExtensionFiles(config, props);
-
-  // Then, add the target to Xcode project
   config = withNotificationServiceExtensionXcodeTarget(config, props);
-
-  // Finally, update the Podfile
   config = withNotificationServiceExtensionPodfile(config);
-
+  config = withNotificationServiceExtensionEASConfig(config);
   return config;
 };
 
