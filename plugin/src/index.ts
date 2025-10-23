@@ -11,6 +11,13 @@ export type WonderPushPluginProps = {
   requiresUserConsent?: boolean;
   geolocation?: boolean;
   iosAPSEnvironment?: 'development' | 'production';
+  android?: {
+    defaultNotificationIconResource?: string;
+    defaultNotificationColorResource?: string;
+    defaultNotificationColor?: string;
+    smallIcons?: string[];
+    largeIcons?: string[];
+  };
 };
 
 const withWonderPush: ConfigPlugin<WonderPushPluginProps | void> = (
