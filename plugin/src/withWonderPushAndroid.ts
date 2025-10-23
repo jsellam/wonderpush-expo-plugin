@@ -123,6 +123,7 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
   const autoInit = props?.autoInit;
   const requiresUserConsent = props?.requiresUserConsent;
   const geolocation = props?.geolocation;
+  const allowBackgroundStart = props?.allowBackgroundStart;
 
   // Extract Android-specific options
   const androidOptions = props?.android;
@@ -273,6 +274,15 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
         mainApplication,
         'com.wonderpush.sdk.geolocation',
         geolocation.toString()
+      );
+    }
+
+    // Add allowBackgroundStart metadata if explicitly set to true or false
+    if (typeof allowBackgroundStart === 'boolean') {
+      AndroidConfig.Manifest.addMetaDataItemToMainApplication(
+        mainApplication,
+        'com.wonderpush.sdk.reactnative.allowBackgroundStart',
+        allowBackgroundStart.toString()
       );
     }
 

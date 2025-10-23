@@ -10,6 +10,7 @@ export type WonderPushPluginProps = {
   autoInit?: boolean;
   requiresUserConsent?: boolean;
   geolocation?: boolean;
+  allowBackgroundStart?: boolean;
   iosAPSEnvironment?: 'development' | 'production';
   android?: {
     defaultNotificationIconResource?: string;
