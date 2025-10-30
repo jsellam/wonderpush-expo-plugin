@@ -49,7 +49,7 @@ const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
 
   // Add aps-environment entitlement
   expoConfig = withEntitlementsPlist(expoConfig, (config) => {
-    const apsEnvironment = props?.iosAPSEnvironment ?? 'development';
+    const apsEnvironment = props?.ios?.apsEnvironment ?? 'development';
     config.modResults['aps-environment'] = apsEnvironment;
     return config;
   });

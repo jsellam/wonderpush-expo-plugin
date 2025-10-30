@@ -11,7 +11,9 @@ export type WonderPushPluginProps = {
   requiresUserConsent?: boolean;
   geolocation?: boolean;
   allowBackgroundStart?: boolean;
-  iosAPSEnvironment?: 'development' | 'production';
+  ios?: {
+    apsEnvironment?: 'development' | 'production';
+  };
   android?: {
     defaultNotificationIconResource?: string;
     defaultNotificationColorResource?: string;
