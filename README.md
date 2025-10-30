@@ -1,35 +1,60 @@
-# wonderpush-expo-plugin
+<p align="center"><img src="https://cdn.by.wonderpush.com/assets/images/logo/logo-type-512x85.png"></p>
 
-Expo plugin for WonderPush
+# Expo plugin for WonderPush React Native SDK
 
-# API documentation
+Mobile push notification delivery with the WonderPush service. The WonderPush React Native SDK is compatible with iOS and Android.
 
-- [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/wonderpush-plugin/)
-- [Documentation for the main branch](https://docs.expo.dev/versions/unversioned/sdk/wonderpush-plugin/)
+[WonderPush](https://www.wonderpush.com) is the most effective way to retain your users and grow your audience while remaining fully GDPR compliant.
 
-# Installation in managed Expo projects
+With this plugin, integrate push notification in minutes in your hybrid iOS and Android app.
 
-For [managed](https://docs.expo.dev/archive/managed-vs-bare/) Expo projects, please follow the installation instructions in the [API documentation for the latest stable release](#api-documentation). If you follow the link and there is no documentation available then this library is not yet usable within managed projects &mdash; it is likely to be included in an upcoming Expo SDK release.
+You can automate notifications based on user behavior, create user segments, and customize the subscription process for visitors.
 
-# Installation in bare React Native projects
+WonderPush offers a 14-day free trial.
+After the trial period, you can benefit from unlimited push notifications and all the features from 1 euro per month. There are no limits on the number of push notifications you can send.
 
-For bare React Native projects, you must ensure that you have [installed and configured the `expo` package](https://docs.expo.dev/bare/installing-expo-modules/) before continuing.
+Our features include rich formats, automation, realtime analytics, powerful segmentation... All our features are included and you benefit from evolutions without ever having to pay more.
 
-### Add the package to your npm dependencies
+## Company
+[WonderPush](https://www.wonderpush.com) is trusted by over 5,000 developers in Europe and Worldwide.
 
-```
-npm install wonderpush-expo-plugin
-```
+WonderPush never shares your data with third parties. Your data is safe with us and we protect the privacy of your users as if they were ours. Data collected by our SDKs is fully documented and hosted in Europe.
 
-### Configure for Android
+We provide ready-made tools to collect and manage user consent, and let users download or delete all their data.
 
+## Features
 
+* **Automatic notifications** - Automatically send personalized notifications to users that match certain criteria
+* **Segmentation** - Send notifications to specific subscribers based on language, tags, events or properties.
+* **Real-time Analytics** - See delivery metrics in real time, and watch them as they convert into visits.
+* **Advanced dashboard** - Discover the power of push notification automation. Manage segments and campaigns. Invite staff to join your project.
 
+## Installation
 
-### Configure for iOS
+See our [Expo Quickstart Guide](https://docs.wonderpush.com/docs/expo-push-notifications).
 
-Run `npx pod-install` after installing the npm package.
+## Reference
 
-# Contributing
+Check out the [**Expo plugin options reference**](https://docs.wonderpush.com/docs/expo-plugin-options-reference) for a list of available options for this Expo plugin.
 
-Contributions are very welcome! Please refer to guidelines described in the [contributing guide]( https://github.com/expo/expo#contributing).
+Check out the [**API reference**](https://docs.wonderpush.com/docs/react-native-sdk) for a list of available methods of the WonderPush React Native SDK.
+
+## Migrate from OneSignal plugin and others
+
+If you need to be GDPR compliant and you already use a push notification plugin, migrating to WonderPush is easy: all you have to do is add the WonderPush plugin to your app and disable the other plugin.
+
+Once you have the WonderPush plugin on your app, users who install the latest version of your app and have already granted push notification permission will automatically appear among your subscribers without having to subscribe again.
+
+## Change log and releases
+
+See the [**releases page**](https://github.com/wonderpush/wonderpush-expo-plugin/releases) on GitHub.
+
+Follow our [**announcements**](https://docs.wonderpush.com/changelog) on our community forum.
+
+## Support
+
+Contact support using the **live chat** on your [dashboard](https://dashboard.wonderpush.com/).
+
+Use the [`#wonderpush`](https://stackoverflow.com/questions/tagged/wonderpush) tag on **StackOverflow**.
+
+Report a bug, file a feature request or send a pull request in the [**issue tracker**](https://github.com/wonderpush/react-native-wonderpush/issues).
