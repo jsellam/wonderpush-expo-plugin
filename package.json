@@ -1,7 +1,7 @@
 {
   "name": "wonderpush-expo-plugin",
   "title": "WonderPush React Native SDK Expo plugin",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Mobile push notification delivery with the WonderPush service. Expo plugin for the WonderPush React Native SDK",
   "main": "build/index.js",
   "types": "build/index.d.ts",
