@@ -1,6 +1,6 @@
-import type { ConfigPlugin } from '@expo/config-plugins';
-import withWonderPushAndroid from './withWonderPushAndroid';
-import withWonderPushIOS from './withWonderPushIOS';
+import type { ConfigPlugin } from "@expo/config-plugins";
+import withWonderPushAndroid from "./withWonderPushAndroid";
+import withWonderPushIOS from "./withWonderPushIOS";
 
 export type WonderPushPluginProps = {
   clientId?: string;
@@ -12,7 +12,8 @@ export type WonderPushPluginProps = {
   geolocation?: boolean;
   allowBackgroundStart?: boolean;
   ios?: {
-    apsEnvironment?: 'development' | 'production';
+    apsEnvironment?: "development" | "production";
+    useFrameworks?: "dynamic" | "static" | boolean;
   };
   android?: {
     defaultNotificationIconResource?: string;

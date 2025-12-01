@@ -1,9 +1,14 @@
-import type { ConfigPlugin } from '@expo/config-plugins';
-import { AndroidConfig, withAndroidManifest, withAndroidColors, withDangerousMod } from '@expo/config-plugins';
-import type { WonderPushPluginProps } from '.';
-import { generateImageAsync } from '@expo/image-utils';
-import * as path from 'path';
-import * as fs from 'fs';
+import type { ConfigPlugin } from "@expo/config-plugins";
+import {
+  AndroidConfig,
+  withAndroidManifest,
+  withAndroidColors,
+  withDangerousMod,
+} from "@expo/config-plugins";
+import type { WonderPushPluginProps } from ".";
+import { generateImageAsync } from "@expo/image-utils";
+import * as path from "path";
+import * as fs from "fs";
 
 // Helper to process icon resource names
 function processIconResourceName(value: string): string {
@@ -11,14 +16,14 @@ function processIconResourceName(value: string): string {
   let processedValue = path.basename(value);
 
   // Strip all extensions from filename
-  processedValue = processedValue.replace(/\.[^/.]+$/, '');
+  processedValue = processedValue.replace(/\.[^/.]+$/, "");
   // Keep stripping if there are more extensions
   while (path.extname(processedValue)) {
-    processedValue = processedValue.replace(/\.[^/.]+$/, '');
+    processedValue = processedValue.replace(/\.[^/.]+$/, "");
   }
 
   // Prepend @drawable/ if it doesn't start with @
-  if (!processedValue.startsWith('@')) {
+  if (!processedValue.startsWith("@")) {
     processedValue = `@drawable/${processedValue}`;
   }
 
@@ -27,7 +32,7 @@ function processIconResourceName(value: string): string {
 
 // Helper to validate and process color resource
 function validateColorResource(value: string): void {
-  if (!value.startsWith('@')) {
+  if (!value.startsWith("@")) {
     throw new Error(
       `android.defaultNotificationColorResource must start with '@'. Expected format: @color/resource_name, got: ${value}`
     );
@@ -44,7 +49,7 @@ function parseColorHex(value: string): string {
   }
 
   // Remove # if present
-  let hex = value.startsWith('#') ? value.substring(1) : value;
+  let hex = value.startsWith("#") ? value.substring(1) : value;
 
   // If 6 digits (RRGGBB), prepend FF for full opacity
   if (hex.length === 6) {
@@ -59,7 +64,7 @@ async function processImageResources(
   projectRoot: string,
   imagePaths: string[],
   sizes: { [key: string]: number },
-  resourceType: 'mipmap' | 'drawable' = 'drawable'
+  resourceType: "mipmap" | "drawable" = "drawable"
 ): Promise<void> {
   for (const imagePath of imagePaths) {
     // Resolve the image path relative to the project root
@@ -84,19 +89,19 @@ async function processImageResources(
           src: resolvedImagePath,
           width: size,
           height: size,
-          resizeMode: 'cover',
-          backgroundColor: 'transparent',
+          resizeMode: "cover",
+          backgroundColor: "transparent",
         }
       );
 
       // Determine the output directory
       const outputDir = path.join(
         projectRoot,
-        'android',
-        'app',
-        'src',
-        'main',
-        'res',
+        "android",
+        "app",
+        "src",
+        "main",
+        "res",
         `${resourceType}-${density}`
       );
 
@@ -116,8 +121,8 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
   expoConfig,
   props
 ) => {
-  const clientId = props?.clientId || 'USE_REMEMBERED';
-  const clientSecret = props?.clientSecret || 'USE_REMEMBERED';
+  const clientId = props?.clientId || "USE_REMEMBERED";
+  const clientSecret = props?.clientSecret || "USE_REMEMBERED";
   const senderId = props?.senderId;
   const logging = props?.logging;
   const autoInit = props?.autoInit;
@@ -127,8 +132,10 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
 
   // Extract Android-specific options
   const androidOptions = props?.android;
-  const defaultNotificationIconResource = androidOptions?.defaultNotificationIconResource;
-  const defaultNotificationColorResource = androidOptions?.defaultNotificationColorResource;
+  const defaultNotificationIconResource =
+    androidOptions?.defaultNotificationIconResource;
+  const defaultNotificationColorResource =
+    androidOptions?.defaultNotificationColorResource;
   const defaultNotificationColor = androidOptions?.defaultNotificationColor;
   const smallIcons = androidOptions?.smallIcons;
   const largeIcons = androidOptions?.largeIcons;
@@ -136,8 +143,8 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
   // Validate that both color options are not used together
   if (defaultNotificationColorResource && defaultNotificationColor) {
     throw new Error(
-      'Cannot use both android.defaultNotificationColorResource and android.defaultNotificationColor. ' +
-      'Please use only one of these options.'
+      "Cannot use both android.defaultNotificationColorResource and android.defaultNotificationColor. " +
+        "Please use only one of these options."
     );
   }
 
@@ -155,7 +162,9 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
   // Process icon resource name if provided
   let processedIconResource: string | undefined;
   if (defaultNotificationIconResource) {
-    processedIconResource = processIconResourceName(defaultNotificationIconResource);
+    processedIconResource = processIconResourceName(
+      defaultNotificationIconResource
+    );
   }
 
   // Add color resource using withAndroidColors
@@ -164,7 +173,7 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
       config.modResults = AndroidConfig.Colors.assignColorValue(
         config.modResults,
         {
-          name: 'wonderpush_default_notification_color',
+          name: "wonderpush_default_notification_color",
           value: formattedColor,
         }
       );
@@ -175,20 +184,20 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
   // Add withDangerousMod to handle image resources
   if (smallIcons && smallIcons.length > 0) {
     expoConfig = withDangerousMod(expoConfig, [
-      'android',
+      "android",
       async (config) => {
         const sizes = {
-          'mdpi': 24,
-          'hdpi': 36,
-          'xhdpi': 48,
-          'xxhdpi': 72,
-          'xxxhdpi': 96,
+          mdpi: 24,
+          hdpi: 36,
+          xhdpi: 48,
+          xxhdpi: 72,
+          xxxhdpi: 96,
         };
         await processImageResources(
           config.modRequest.projectRoot,
           smallIcons,
           sizes,
-          'drawable'
+          "drawable"
         );
         return config;
       },
@@ -197,16 +206,16 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
 
   if (largeIcons && largeIcons.length > 0) {
     expoConfig = withDangerousMod(expoConfig, [
-      'android',
+      "android",
       async (config) => {
         const sizes = {
-          'xxxhdpi': 256,
+          xxxhdpi: 256,
         };
         await processImageResources(
           config.modRequest.projectRoot,
           largeIcons,
           sizes,
-          'drawable'
+          "drawable"
         );
         return config;
       },
@@ -221,67 +230,67 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
     // Add clientId metadata
     AndroidConfig.Manifest.addMetaDataItemToMainApplication(
       mainApplication,
-      'com.wonderpush.sdk.clientId',
+      "com.wonderpush.sdk.clientId",
       clientId
     );
 
     // Add clientSecret metadata
     AndroidConfig.Manifest.addMetaDataItemToMainApplication(
       mainApplication,
-      'com.wonderpush.sdk.clientSecret',
+      "com.wonderpush.sdk.clientSecret",
       clientSecret
     );
 
     // Add senderId metadata only if provided and non-empty
-    if (senderId && senderId.trim() !== '') {
+    if (senderId && senderId.trim() !== "") {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.wonderpush.sdk.senderId',
+        "com.wonderpush.sdk.senderId",
         senderId
       );
     }
 
     // Add logging metadata if explicitly set to true or false
-    if (typeof logging === 'boolean') {
+    if (typeof logging === "boolean") {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.wonderpush.sdk.logging',
+        "com.wonderpush.sdk.logging",
         logging.toString()
       );
     }
 
     // Add autoInit metadata if explicitly set to true or false
-    if (typeof autoInit === 'boolean') {
+    if (typeof autoInit === "boolean") {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.wonderpush.sdk.autoInit',
+        "com.wonderpush.sdk.autoInit",
         autoInit.toString()
       );
     }
 
     // Add requiresUserConsent metadata if explicitly set to true or false
-    if (typeof requiresUserConsent === 'boolean') {
+    if (typeof requiresUserConsent === "boolean") {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.wonderpush.sdk.requiresUserConsent',
+        "com.wonderpush.sdk.requiresUserConsent",
         requiresUserConsent.toString()
       );
     }
 
     // Add geolocation metadata if explicitly set to true or false
-    if (typeof geolocation === 'boolean') {
+    if (typeof geolocation === "boolean") {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.wonderpush.sdk.geolocation',
+        "com.wonderpush.sdk.geolocation",
         geolocation.toString()
       );
     }
 
     // Add allowBackgroundStart metadata if explicitly set to true or false
-    if (typeof allowBackgroundStart === 'boolean') {
+    if (typeof allowBackgroundStart === "boolean") {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.wonderpush.sdk.reactnative.allowBackgroundStart',
+        "com.wonderpush.sdk.reactnative.allowBackgroundStart",
         allowBackgroundStart.toString()
       );
     }
@@ -290,9 +299,9 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
     if (processedIconResource) {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.google.firebase.messaging.default_notification_icon',
+        "com.google.firebase.messaging.default_notification_icon",
         processedIconResource,
-        'resource'
+        "resource"
       );
     }
 
@@ -300,9 +309,9 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
     if (defaultNotificationColorResource) {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.google.firebase.messaging.default_notification_color',
+        "com.google.firebase.messaging.default_notification_color",
         defaultNotificationColorResource,
-        'resource'
+        "resource"
       );
     }
 
@@ -310,9 +319,9 @@ const withWonderPushAndroid: ConfigPlugin<WonderPushPluginProps | void> = (
     if (formattedColor) {
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        'com.google.firebase.messaging.default_notification_color',
-        '@color/wonderpush_default_notification_color',
-        'resource'
+        "com.google.firebase.messaging.default_notification_color",
+        "@color/wonderpush_default_notification_color",
+        "resource"
       );
     }
 

@@ -1,14 +1,14 @@
-import type { ConfigPlugin } from '@expo/config-plugins';
-import { withInfoPlist, withEntitlementsPlist } from '@expo/config-plugins';
-import type { WonderPushPluginProps } from '.';
-import withWonderPushNotificationServiceExtension from './withWonderPushNotificationServiceExtension';
+import type { ConfigPlugin } from "@expo/config-plugins";
+import { withInfoPlist, withEntitlementsPlist } from "@expo/config-plugins";
+import type { WonderPushPluginProps } from ".";
+import withWonderPushNotificationServiceExtension from "./withWonderPushNotificationServiceExtension";
 
 const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
   expoConfig,
   props
 ) => {
-  const clientId = props?.clientId || 'USE_REMEMBERED';
-  const clientSecret = props?.clientSecret || 'USE_REMEMBERED';
+  const clientId = props?.clientId || "USE_REMEMBERED";
+  const clientSecret = props?.clientSecret || "USE_REMEMBERED";
   const logging = props?.logging;
   const requiresUserConsent = props?.requiresUserConsent;
   const geolocation = props?.geolocation;
@@ -18,10 +18,10 @@ const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
     const existingModes = config.modResults.UIBackgroundModes || [];
 
     // Add remote-notification if not already present
-    if (!existingModes.includes('remote-notification')) {
+    if (!existingModes.includes("remote-notification")) {
       config.modResults.UIBackgroundModes = [
         ...existingModes,
-        'remote-notification',
+        "remote-notification",
       ];
     }
 
@@ -30,17 +30,17 @@ const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
     config.modResults.WonderPushClientSecret = clientSecret;
 
     // Add logging config if explicitly set to true or false
-    if (typeof logging === 'boolean') {
+    if (typeof logging === "boolean") {
       config.modResults.WonderPushLogging = logging;
     }
 
     // Add requiresUserConsent config if explicitly set to true or false
-    if (typeof requiresUserConsent === 'boolean') {
+    if (typeof requiresUserConsent === "boolean") {
       config.modResults.WonderPushRequiresUserConsent = requiresUserConsent;
     }
 
     // Add geolocation config if explicitly set to true or false
-    if (typeof geolocation === 'boolean') {
+    if (typeof geolocation === "boolean") {
       config.modResults.WonderPushGeolocation = geolocation;
     }
 
@@ -49,8 +49,8 @@ const withWonderPushIOS: ConfigPlugin<WonderPushPluginProps | void> = (
 
   // Add aps-environment entitlement
   expoConfig = withEntitlementsPlist(expoConfig, (config) => {
-    const apsEnvironment = props?.ios?.apsEnvironment ?? 'development';
-    config.modResults['aps-environment'] = apsEnvironment;
+    const apsEnvironment = props?.ios?.apsEnvironment ?? "development";
+    config.modResults["aps-environment"] = apsEnvironment;
     return config;
   });
 
